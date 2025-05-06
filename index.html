@@ -3,283 +3,397 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iOS Style Music Player</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Nexus AI - Intelligent Assistant</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS will be placed here */
         :root {
-            --primary-color: #FF2D55;
-            --background-color: #F2F2F7;
-            --card-color: #FFFFFF;
-            --text-primary: #1C1C1E;
-            --text-secondary: #8E8E93;
+            --primary: #6e48aa;
+            --secondary: #9d50bb;
+            --accent: #4776E6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --ai-bubble: #f0f4ff;
+            --user-bubble: #6e48aa;
+            --shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
-            background-color: var(--background-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
             min-height: 100vh;
-            padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .music-player {
+        .app-container {
+            max-width: 1200px;
             width: 100%;
-            max-width: 380px;
-            background-color: var(--card-color);
-            border-radius: 20px;
+            margin: 0 auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .album-art {
-            width: 100%;
-            height: 380px;
-            background-image: url('https://i.scdn.co/image/ab67616d0000b273c8b444df094279e70d0ed856');
-            background-size: cover;
-            background-position: center;
             position: relative;
         }
 
-        .album-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
-        }
-
-        .song-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 4px;
-        }
-
-        .artist-name {
-            font-size: 16px;
-            color: rgba(255, 255, 255, 0.8);
-        }
-
-        .player-controls {
-            padding: 25px;
-        }
-
-        .progress-container {
-            margin-bottom: 25px;
-        }
-
-        .progress-bar {
-            height: 4px;
-            background-color: #E5E5EA;
-            border-radius: 2px;
-            margin-bottom: 8px;
-            position: relative;
-        }
-
-        .progress {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 30%;
-            background-color: var(--primary-color);
-            border-radius: 2px;
-        }
-
-        .time {
+            padding: 1.2rem 2rem;
             display: flex;
-            justify-content: space-between;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+            z-index: 10;
         }
 
-        .control-btn {
-            background: none;
-            border: none;
-            color: var(--text-primary);
-            font-size: 20px;
-            cursor: pointer;
-            width: 40px;
-            height: 40px;
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            transition: all 0.2s;
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 18px;
         }
 
-        .control-btn:active {
-            transform: scale(0.95);
+        .logo-text {
+            font-weight: 700;
+            font-size: 1.4rem;
         }
 
-        .control-btn.play-pause {
-            width: 70px;
-            height: 70px;
-            background-color: var(--primary-color);
+        .chat-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 1.2rem 1.5rem;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .ai-message {
+            align-self: flex-start;
+            background-color: var(--ai-bubble);
+            border-bottom-left-radius: 4px;
+            color: var(--dark);
+            box-shadow: var(--shadow);
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
             color: white;
-            font-size: 28px;
+            border-bottom-right-radius: 4px;
         }
 
-        .volume-controls {
+        .input-container {
+            padding: 1.2rem 2rem;
+            background: white;
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .input-field {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            background: #f5f7fa;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .input-field:focus {
+            background: white;
+            box-shadow: 0 0 0 2px var(--accent), inset 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .volume-icon {
-            color: var(--text-secondary);
-            font-size: 16px;
-        }
-
-        .volume-bar {
-            flex-grow: 1;
-            height: 3px;
-            background-color: #E5E5EA;
-            border-radius: 1.5px;
-            position: relative;
-        }
-
-        .volume-progress {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 80%;
-            background-color: var(--primary-color);
-            border-radius: 1.5px;
-        }
-
-        .additional-features {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-        }
-
-        .feature-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
+            justify-content: center;
             cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(110, 72, 170, 0.3);
+        }
+
+        .send-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(110, 72, 170, 0.4);
+        }
+
+        .send-btn:active {
+            transform: translateY(0);
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 6px;
+            padding: 1rem 1.5rem;
+            background-color: var(--ai-bubble);
+            border-radius: 18px;
+            align-self: flex-start;
+            margin-bottom: 1rem;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: typingAnimation 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) {
+            animation-delay: 0s;
+        }
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingAnimation {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            header {
+                padding: 1rem;
+            }
+            
+            .chat-container {
+                padding: 1rem;
+            }
+            
+            .message {
+                max-width: 90%;
+                padding: 1rem;
+            }
+            
+            .input-container {
+                padding: 1rem;
+            }
+            
+            .input-field {
+                padding: 0.8rem 1.2rem;
+            }
+            
+            .send-btn {
+                width: 45px;
+                height: 45px;
+            }
+        }
+
+        /* Unique decorative elements */
+        .decorative-circle {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .circle-1 {
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--secondary);
+            bottom: -150px;
+            left: -150px;
+        }
+
+        /* Markdown-like formatting in AI responses */
+        .ai-message strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .ai-message code {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.9em;
+        }
+
+        .ai-message pre {
+            background: rgba(0, 0, 0, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0.5rem 0;
         }
     </style>
 </head>
 <body>
-    <div class="music-player">
-        <div class="album-art">
-            <div class="album-overlay">
-                <div class="song-title">Echolalia</div>
-                <div class="artist-name">Yves Tumor</div>
+    <div class="app-container">
+        <div class="decorative-circle circle-1"></div>
+        <div class="decorative-circle circle-2"></div>
+        
+        <header>
+            <div class="logo">
+                <div class="logo-icon">N</div>
+                <div class="logo-text">Nexus AI</div>
             </div>
+            <div class="header-actions">
+                <button style="background: none; border: none; color: white; font-size: 1.2rem;">⋯</button>
+            </div>
+        </header>
+        
+        <div class="chat-container" id="chatContainer">
+            <div class="message ai-message">
+                Hello! I'm Nexus AI, your intelligent assistant. How can I help you today? I can answer questions, explain concepts, help with coding, and much more.
+            </div>
+            
+            <!-- More messages will be added here dynamically -->
         </div>
         
-        <div class="player-controls">
-            <div class="progress-container">
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-                <div class="time">
-                    <span class="current-time">2:00</span>
-                    <span class="duration">3:30</span>
-                </div>
-            </div>
-            
-            <div class="controls">
-                <button class="control-btn">
-                    <i class="fas fa-backward"></i>
-                </button>
-                <button class="control-btn play-pause" id="playPauseBtn">
-                    <i class="fas fa-play" id="playIcon"></i>
-                </button>
-                <button class="control-btn">
-                    <i class="fas fa-forward"></i>
-                </button>
-            </div>
-            
-            <div class="volume-controls">
-                <i class="fas fa-volume-down volume-icon"></i>
-                <div class="volume-bar">
-                    <div class="volume-progress"></div>
-                </div>
-            </div>
-            
-            <div class="additional-features">
-                <button class="feature-btn">
-                    <i class="fas fa-list-ul"></i>
-                </button>
-                <button class="feature-btn">
-                    <i class="fas fa-random"></i>
-                </button>
-                <button class="feature-btn">
-                    <i class="fas fa-redo"></i>
-                </button>
-                <button class="feature-btn">
-                    <i class="fas fa-heart"></i>
-                </button>
-            </div>
+        <div class="input-container">
+            <input type="text" class="input-field" id="userInput" placeholder="Ask me anything..." autofocus>
+            <button class="send-btn" id="sendButton">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="22" y1="2" x2="11" y2="13"></line>
+                    <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                </svg>
+            </button>
         </div>
     </div>
 
-    <audio id="audioPlayer" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
-
     <script>
-        const audioPlayer = document.getElementById('audioPlayer');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const playIcon = document.getElementById('playIcon');
-        const progress = document.querySelector('.progress');
-        const currentTimeDisplay = document.querySelector('.current-time');
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+        const sendButton = document.getElementById('sendButton');
         
-        let isPlaying = false;
+        // Sample AI responses (in a real app, this would connect to an API)
+        const sampleResponses = {
+            "hello": "Hello there! How can I assist you today?",
+            "how are you": "I'm an AI, so I don't have feelings, but I'm functioning perfectly! How can I help you?",
+            "what can you do": "I can answer questions, explain concepts, help with coding, provide recommendations, summarize information, and much more! Try asking me anything.",
+            "tell me a joke": "Why don't scientists trust atoms? Because they make up everything!",
+            "default": "I'm not sure I understand. Could you rephrase your question or ask something else?"
+        };
         
-        // Play/Pause functionality
-        playPauseBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                audioPlayer.pause();
-                playIcon.classList.replace('fa-pause', 'fa-play');
-            } else {
-                audioPlayer.play();
-                playIcon.classList.replace('fa-play', 'fa-pause');
+        // Add a message to the chat
+        function addMessage(text, isUser) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message');
+            messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+            messageDiv.textContent = text;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        // Show typing indicator
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator');
+            typingDiv.innerHTML = `
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            `;
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return typingDiv;
+        }
+        
+        // Process user input
+        function processInput() {
+            const text = userInput.value.trim();
+            if (text === '') return;
+            
+            // Add user message
+            addMessage(text, true);
+            userInput.value = '';
+            
+            // Show typing indicator
+            const typingIndicator = showTyping();
+            
+            // Simulate AI thinking (in a real app, this would be an API call)
+            setTimeout(() => {
+                // Remove typing indicator
+                chatContainer.removeChild(typingIndicator);
+                
+                // Generate response (simple logic for demo)
+                const lowerText = text.toLowerCase();
+                let response = sampleResponses.default;
+                
+                for (const [key, value] of Object.entries(sampleResponses)) {
+                    if (lowerText.includes(key)) {
+                        response = value;
+                        break;
+                    }
+                }
+                
+                // Add AI response
+                addMessage(response, false);
+            }, 1000 + Math.random() * 2000); // Random delay between 1-3 seconds
+        }
+        
+        // Event listeners
+        sendButton.addEventListener('click', processInput);
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                processInput();
             }
-            isPlaying = !isPlaying;
         });
         
-        // Update progress bar
-        audioPlayer.addEventListener('timeupdate', () => {
-            const progressPercent = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-            progress.style.width = `${progressPercent}%`;
-            
-            // Update current time display
-            const currentMinutes = Math.floor(audioPlayer.currentTime / 60);
-            const currentSeconds = Math.floor(audioPlayer.currentTime % 60).toString().padStart(2, '0');
-            currentTimeDisplay.textContent = `${currentMinutes}:${currentSeconds}`;
-        });
-        
-        // Click on progress bar to seek
-        document.querySelector('.progress-bar').addEventListener('click', (e) => {
-            const progressBar = e.currentTarget;
-            const clickPosition = e.offsetX;
-            const progressBarWidth = progressBar.clientWidth;
-            const seekTime = (clickPosition / progressBarWidth) * audioPlayer.duration;
-            
-            audioPlayer.currentTime = seekTime;
-        });
+        // Initial focus on input
+        userInput.focus();
     </script>
 </body>
-                        </html>
+    </html>
