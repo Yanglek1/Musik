@@ -1,0 +1,35 @@
+body { 
+    background: #f8fafc; 
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { 
+    width: 4px; 
+}
+::-webkit-scrollbar-track { 
+    background: transparent; 
+}
+::-webkit-scrollbar-thumb { 
+    background: #cbd5e1; 
+    border-radius: 10px; 
+}
+
+/* Modern Gradient Background */
+.bg-mesh {
+    background-color: #f8fafc;
+    background-image: 
+        radial-gradient(at 0% 0%, hsla(217, 100%, 76%, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(189, 100%, 56%, 0.15) 0px, transparent 50%);
+    background-attachment: fixed;
+}
+
+/* Smooth Toast Animation */
+.toast-enter { 
+    transform: translateY(150%) scale(0.9); 
+    opacity: 0; 
+}
+.toast-enter-active { 
+    transform: translateY(0) scale(1); 
+    opacity: 1; 
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+}
