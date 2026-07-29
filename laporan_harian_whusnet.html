@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Laporan Whusnet</title>
+  <style>
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; padding: 15px; margin: 0; }
+    .container { max-width: 500px; margin: 20px auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #0056b3; }
+    h2 { text-align: center; color: #0056b3; margin-top: 0; }
+    label { font-weight: 600; margin-top: 12px; display: block; color: #495057; font-size: 14px; }
+    input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
+    input:focus, select:focus, textarea:focus { border-color: #0056b3; outline: none; box-shadow: 0 0 5px rgba(0,86,179,0.2); }
+    button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+    button:hover { background-color: #004494; }
+    #loading { display: none; text-align: center; color: #d39e00; font-weight: bold; margin-top: 15px; font-size: 14px; }
+    #success { display: none; text-align: center; color: #28a745; font-weight: bold; margin-top: 15px; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Laporan Teknisi Whusnet</h2>
+    <form id="formLaporan">
+      
+      <label>Tanggal</label>
+      <input type="date" name="tanggal" required>
+      
+      <label>Hari</label>
+      <select name="hari" required>
+        <option value="Senin">Senin</option><option value="Selasa">Selasa</option>
+        <option value="Rabu">Rabu</option><option value="Kamis">Kamis</option>
+        <option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option>
+        <option value="Minggu">Minggu</option>
+      </select>
+      
+      <label>Nama Teknisi</label>
+      <input type="text" name="teknisi" placeholder="Contoh: Budi" required>
+      
+      <label>No. Tiket / Referensi</label>
+      <input type="text" name="tiket" placeholder="Contoh: TIK-001">
+      
+      <label>Nama/Lokasi Pelanggan</label>
+      <input type="text" name="pelanggan" placeholder="Contoh: Warnet Maju Jaya" required>
+      
+      <label>Deskripsi Pekerjaan</label>
+      <textarea name="deskripsi" rows="3" placeholder="Contoh: Instalasi kabel fiber optik baru..." required></textarea>
+      
+      <label>Material Digunakan</label>
+      <input type="text" name="material" placeholder="Contoh: 50m FO, 1 Roset, 1 Patchcord">
+      
+      <label>Status</label>
+      <select name="status">
+        <option value="Selesai">Selesai</option>
+        <option value="Pending">Pending</option>
+      </select>
+      
+      <label>Keterangan Tambahan</label>
+      <input type="text" name="keterangan" placeholder="Contoh: Redaman -20dBm, Aman">
+      
+      <button type="submit">Kirim Laporan ke Sheet</button>
+      <div id="loading">⏳ Sedang mengirim data... Jangan tutup halaman ini.</div>
+      <div id="success">✅ Mantap! Laporan berhasil masuk ke Google Sheet.</div>
+    </form>
+  </div>
+
+  <script>
+    // PASTIKAN ANDA MENGGANTI URL DI BAWAH INI DENGAN URL WEB APP MILIK ANDA
+    const scriptURL = 'MASUKKAN_URL_WEB_APP_DI_SINI'; 
+    
+    const form = document.forms['formLaporan'];
+    const btnSubmit = document.querySelector('button[type="submit"]');
+    const loading = document.getElementById('loading');
+    const successMsg = document.getElementById('success');
+
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      
+      // Tampilkan status loading
+      loading.style.display = 'block';
+      successMsg.style.display = 'none';
+      btnSubmit.disabled = true;
+
+      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          loading.style.display = 'none';
+          successMsg.style.display = 'block';
+          btnSubmit.disabled = false;
+          form.reset(); // Kosongkan form setelah sukses
+          
+          // Hilangkan pesan sukses setelah 4 detik
+          setTimeout(() => {
+            successMsg.style.display = 'none';
+          }, 4000);
+        })
+        .catch(error => {
+          loading.style.display = 'none';
+          btnSubmit.disabled = false;
+          alert('Ups! Gagal mengirim laporan. Pastikan koneksi internet aman.');
+          console.error('Error!', error.message);
+        });
+    });
+  </script>
+</body>
+</html>
