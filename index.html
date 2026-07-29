@@ -1,105 +1,176 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Laporan Whusnet</title>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; padding: 15px; margin: 0; }
-    .container { max-width: 500px; margin: 20px auto; background: #ffffff; padding: 25px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); border-top: 5px solid #0056b3; }
-    h2 { text-align: center; color: #0056b3; margin-top: 0; }
-    label { font-weight: 600; margin-top: 12px; display: block; color: #495057; font-size: 14px; }
-    input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ced4da; border-radius: 6px; box-sizing: border-box; font-family: inherit; }
-    input:focus, select:focus, textarea:focus { border-color: #0056b3; outline: none; box-shadow: 0 0 5px rgba(0,86,179,0.2); }
-    button { width: 100%; padding: 12px; background-color: #0056b3; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
-    button:hover { background-color: #004494; }
-    #loading { display: none; text-align: center; color: #d39e00; font-weight: bold; margin-top: 15px; font-size: 14px; }
-    #success { display: none; text-align: center; color: #28a745; font-weight: bold; margin-top: 15px; font-size: 14px; }
-  </style>
-</head>
-<body>
-
-  <div class="container">
-    <h2>Laporan Teknisi Whusnet</h2>
-    <form id="formLaporan">
-      
-      <label>Tanggal</label>
-      <input type="date" name="tanggal" required>
-      
-      <label>Hari</label>
-      <select name="hari" required>
-        <option value="Senin">Senin</option><option value="Selasa">Selasa</option>
-        <option value="Rabu">Rabu</option><option value="Kamis">Kamis</option>
-        <option value="Jumat">Jumat</option><option value="Sabtu">Sabtu</option>
-        <option value="Minggu">Minggu</option>
-      </select>
-      
-      <label>Nama Teknisi</label>
-      <input type="text" name="teknisi" placeholder="Contoh: Budi" required>
-      
-      <label>No. Tiket / Referensi</label>
-      <input type="text" name="tiket" placeholder="Contoh: TIK-001">
-      
-      <label>Nama/Lokasi Pelanggan</label>
-      <input type="text" name="pelanggan" placeholder="Contoh: Warnet Maju Jaya" required>
-      
-      <label>Deskripsi Pekerjaan</label>
-      <textarea name="deskripsi" rows="3" placeholder="Contoh: Instalasi kabel fiber optik baru..." required></textarea>
-      
-      <label>Material Digunakan</label>
-      <input type="text" name="material" placeholder="Contoh: 50m FO, 1 Roset, 1 Patchcord">
-      
-      <label>Status</label>
-      <select name="status">
-        <option value="Selesai">Selesai</option>
-        <option value="Pending">Pending</option>
-      </select>
-      
-      <label>Keterangan Tambahan</label>
-      <input type="text" name="keterangan" placeholder="Contoh: Redaman -20dBm, Aman">
-      
-      <button type="submit">Kirim Laporan ke Sheet</button>
-      <div id="loading">⏳ Sedang mengirim data... Jangan tutup halaman ini.</div>
-      <div id="success">✅ Mantap! Laporan berhasil masuk ke Google Sheet.</div>
-    </form>
-  </div>
-
-  <script>
-    // PASTIKAN ANDA MENGGANTI URL DI BAWAH INI DENGAN URL WEB APP MILIK ANDA
-    const scriptURL = 'MASUKKAN_URL_WEB_APP_DI_SINI'; 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whusnet - Technician Portal</title>
     
-    const form = document.forms['formLaporan'];
-    const btnSubmit = document.querySelector('button[type="submit"]');
-    const loading = document.getElementById('loading');
-    const successMsg = document.getElementById('success');
+    <!-- Tautan ke CSS Terpisah -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Font & Icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN & Config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        whusnet: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a', accent: '#06b6d4' }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="text-slate-800 antialiased bg-mesh relative min-h-screen">
 
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      
-      // Tampilkan status loading
-      loading.style.display = 'block';
-      successMsg.style.display = 'none';
-      btnSubmit.disabled = true;
+    <!-- Modern Floating Navbar -->
+    <nav class="sticky top-0 z-50 px-4 pt-4 pb-2">
+        <div class="max-w-md mx-auto bg-slate-900/90 backdrop-blur-md text-white shadow-xl shadow-blue-900/10 rounded-2xl px-5 py-3.5 flex justify-between items-center border border-slate-700/50">
+            <!-- Whusnet Logo -->
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-whusnet-600 to-whusnet-accent flex items-center justify-center shadow-lg shadow-whusnet-500/30">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <div class="flex flex-col leading-none">
+                    <span class="text-xl font-extrabold tracking-tight text-white">WHUS<span class="text-whusnet-accent">NET</span></span>
+                    <span class="text-[10px] font-medium text-slate-400 tracking-widest uppercase mt-0.5">Technician</span>
+                </div>
+            </div>
+            
+            <div class="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner">
+                <i class="fa-regular fa-user text-slate-300"></i>
+            </div>
+        </div>
+    </nav>
 
-      fetch(scriptURL, { method: 'POST', body: new FormData(form)})
-        .then(response => {
-          loading.style.display = 'none';
-          successMsg.style.display = 'block';
-          btnSubmit.disabled = false;
-          form.reset(); // Kosongkan form setelah sukses
-          
-          // Hilangkan pesan sukses setelah 4 detik
-          setTimeout(() => {
-            successMsg.style.display = 'none';
-          }, 4000);
-        })
-        .catch(error => {
-          loading.style.display = 'none';
-          btnSubmit.disabled = false;
-          alert('Ups! Gagal mengirim laporan. Pastikan koneksi internet aman.');
-          console.error('Error!', error.message);
-        });
-    });
-  </script>
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto px-4 py-4 pb-24">
+        
+        <!-- Welcome Banner -->
+        <div class="mb-6 px-2 flex items-end justify-between">
+            <div>
+                <p class="text-sm font-medium text-slate-500 mb-1" id="currentDate">--</p>
+                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Siap bertugas? 🚀</h1>
+            </div>
+        </div>
+
+        <!-- Form Card (Glassmorphism style) -->
+        <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
+            <div class="bg-gradient-to-r from-whusnet-600 to-whusnet-500 px-6 py-4 relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
+                <h2 class="font-bold text-white flex items-center text-lg relative z-10">
+                    <i class="fa-solid fa-clipboard-check mr-2.5 opacity-90"></i> Laporan Harian
+                </h2>
+            </div>
+            
+            <form id="reportForm" class="p-6 space-y-5">
+                <input type="hidden" name="tanggal" id="tanggal">
+                <input type="hidden" name="hari" id="hari">
+                
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Nama Teknisi</label>
+                    <input type="text" name="teknisi" required placeholder="Cth: Budi Pratama" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">No. Tiket / Order</label>
+                    <input type="text" name="tiket" id="tiket" required placeholder="TKT-20230912" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium uppercase placeholder:normal-case">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Pelanggan & Lokasi</label>
+                    <input type="text" name="pelanggan" id="pelanggan" required placeholder="Cth: Warnet Jaya - Jl. Sudirman" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Jenis Pekerjaan</label>
+                    <div class="relative">
+                        <select name="deskripsi" id="pekerjaan" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium appearance-none">
+                            <option value="" disabled selected>Pilih jenis pekerjaan...</option>
+                            <option value="Instalasi Baru (PSB)">Instalasi Baru (PSB)</option>
+                            <option value="Maintenance / Gangguan">Maintenance / Gangguan</option>
+                            <option value="Splicing / Perbaikan Kabel">Splicing / Perbaikan Kabel</option>
+                            <option value="Dismantle / Pencabutan">Dismantle / Pencabutan</option>
+                        </select>
+                        <i class="fa-solid fa-chevron-down absolute right-4 top-4 text-slate-400 text-sm pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Material Digunakan</label>
+                    <textarea name="material" id="material" rows="2" placeholder="Cth: Drop core 50m, 2 Fast Connector, 1 Roset..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium resize-none"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Status Pekerjaan</label>
+                    <div class="flex p-1 bg-slate-100 rounded-xl border border-slate-200/60">
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="status" value="Selesai" class="peer sr-only" checked>
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-emerald-600 text-slate-500 text-sm font-bold transition-all">
+                                <i class="fa-solid fa-check-circle mr-1"></i> Selesai
+                            </div>
+                        </label>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="status" value="Pending" class="peer sr-only">
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-amber-500 text-slate-500 text-sm font-bold transition-all">
+                                <i class="fa-solid fa-clock mr-1"></i> Pending
+                            </div>
+                        </label>
+                        <label class="flex-1 cursor-pointer">
+                            <input type="radio" name="status" value="Kendala" class="peer sr-only">
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-rose-500 text-slate-500 text-sm font-bold transition-all">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Kendala
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Hasil Redaman (OTDR/OPM) & Keterangan</label>
+                    <input type="text" name="keterangan" id="keterangan" placeholder="Cth: Rx -19.5 dBm. Splicing aman." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-whusnet-600 to-whusnet-500 hover:from-whusnet-900 hover:to-whusnet-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-whusnet-500/30 transition-all active:scale-[0.98] flex items-center justify-center mt-4">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Submit Laporan
+                </button>
+            </form>
+        </div>
+
+        <!-- Recent Submissions Preview -->
+        <div class="mt-8">
+            <h3 class="text-sm font-bold text-slate-700 mb-4 px-1 flex items-center justify-between">
+                <span>Riwayat Hari Ini</span>
+                <span class="text-xs font-semibold text-whusnet-600 bg-whusnet-50 px-2 py-1 rounded-md cursor-pointer hover:bg-whusnet-100 transition">Lihat Sheet</span>
+            </h3>
+            <div id="recentLogs" class="space-y-3">
+                <div class="text-center py-8 text-sm font-medium text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl bg-white/50" id="emptyState">
+                    <i class="fa-solid fa-inbox text-2xl mb-2 text-slate-300 block"></i>
+                    Belum ada laporan ditarik.
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 transition-all duration-300 toast-enter hidden z-50 w-[90%] max-w-sm border border-slate-700">
+        <div class="w-9 h-9 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
+            <i class="fa-solid fa-check text-white text-sm"></i>
+        </div>
+        <div class="flex-1">
+            <p class="text-sm font-bold">Laporan Terkirim!</p>
+            <p class="text-[11px] text-slate-300 font-medium">Data berhasil masuk ke sistem.</p>
+        </div>
+    </div>
+
+    <!-- Tautan ke JavaScript Terpisah -->
+    <script src="script.js"></script>
 </body>
 </html>
