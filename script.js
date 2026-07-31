@@ -83,7 +83,7 @@ document.getElementById('pelanggan').value = pelanggan;
             btnSubmit.disabled = false;
             alert('Gagal mengirim laporan. Pastikan koneksi internet stabil.');
         });
-});
+    
 // --- FITUR MENGAMBIL LOKASI GPS ---
 const btnLokasi = document.getElementById('btn-lokasi');
 const inputKoordinat = document.getElementById('koordinat');
