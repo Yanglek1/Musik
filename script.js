@@ -24,7 +24,16 @@ form.addEventListener('submit', function(e) {
     btnSubmit.disabled = true;
 
     const tiket = document.getElementById('tiket').value;
-    const pelanggan = document.getElementById('pelanggan').value;
+    // Gabungkan data pelanggan dengan data GPS (jika ada)
+let pelanggan = document.getElementById('pelanggan').value;
+const koordinatGPS = document.getElementById('koordinat').value;
+if (koordinatGPS) {
+    pelanggan = pelanggan + ' (GPS: ' + koordinatGPS + ')';
+}
+
+// Update nilai di dalam form sebelum dikirim ke Google Sheet
+document.getElementById('pelanggan').value = pelanggan;
+
     const pekerjaan = document.getElementById('pekerjaan').value;
     const status = document.querySelector('input[name="status"]:checked').value;
 
@@ -74,4 +83,36 @@ form.addEventListener('submit', function(e) {
             btnSubmit.disabled = false;
             alert('Gagal mengirim laporan. Pastikan koneksi internet stabil.');
         });
+});
+// --- FITUR MENGAMBIL LOKASI GPS ---
+const btnLokasi = document.getElementById('btn-lokasi');
+const inputKoordinat = document.getElementById('koordinat');
+
+btnLokasi.addEventListener('click', () => {
+    if (navigator.geolocation) {
+        // Ubah ikon jadi loading
+        btnLokasi.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                // Masukkan hasil ke kolom input
+                inputKoordinat.value = `${lat}, ${lng}`;
+                
+                // Ubah ikon jadi centang hijau sebentar
+                btnLokasi.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>';
+                setTimeout(() => {
+                    btnLokasi.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+                }, 2000);
+            },
+            (error) => {
+                alert('Gagal mengambil lokasi! Pastikan GPS HP Anda menyala dan izinkan browser mengakses lokasi.');
+                btnLokasi.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    } else {
+        alert('Browser Anda tidak mendukung fitur lokasi GPS.');
+    }
 });
