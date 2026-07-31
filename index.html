@@ -12,7 +12,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS (CDN & Config) -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -20,78 +20,83 @@
                 extend: {
                     fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
                     colors: {
-                        whusnet: { 50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a', accent: '#06b6d4' }
+                        dark: { bg: '#000000', panel: '#0a0a0a', border: '#222222', text: '#ffffff', muted: '#888888' }
                     }
                 }
             }
         }
     </script>
+    <style>
+        /* Memastikan background hitam murni */
+        body { background-color: #000000; color: #ffffff; }
+        
+        /* Kustomisasi input date/select icon untuk dark mode */
+        ::-webkit-calendar-picker-indicator { filter: invert(1); }
+    </style>
 </head>
-<body class="text-slate-800 antialiased bg-mesh relative min-h-screen">
+<body class="antialiased relative min-h-screen">
 
-    <!-- Modern Floating Navbar -->
-    <nav class="sticky top-0 z-50 px-4 pt-4 pb-2">
-        <div class="max-w-md mx-auto bg-slate-900/90 backdrop-blur-md text-white shadow-xl shadow-blue-900/10 rounded-2xl px-5 py-3.5 flex justify-between items-center border border-slate-700/50">
-            <!-- Whusnet Logo -->
-            <div class="flex items-center space-x-2.5">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-whusnet-600 to-whusnet-accent flex items-center justify-center shadow-lg shadow-whusnet-500/30">
+    <!-- Navbar: Diturunkan dengan pt-12 (padding-top) agar tidak mentok status bar -->
+    <nav class="sticky top-0 z-50 px-4 pt-12 pb-4 bg-black/80 backdrop-blur-md">
+        <div class="max-w-md mx-auto bg-dark-panel text-white rounded-2xl px-5 py-3.5 flex justify-between items-center border border-dark-border">
+            <!-- Whusnet Logo Monochrome -->
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl border border-dark-border bg-black flex items-center justify-center">
                     <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
                     </svg>
                 </div>
                 <div class="flex flex-col leading-none">
-                    <span class="text-xl font-extrabold tracking-tight text-white">WHUS<span class="text-whusnet-accent">NET</span></span>
-                    <span class="text-[10px] font-medium text-slate-400 tracking-widest uppercase mt-0.5">Technician</span>
+                    <span class="text-xl font-bold tracking-tight text-white">WHUSNET</span>
+                    <span class="text-[10px] font-medium text-dark-muted tracking-widest uppercase mt-0.5">Technician</span>
                 </div>
             </div>
             
-            <div class="w-9 h-9 bg-slate-800 rounded-full flex items-center justify-center text-sm font-bold border border-slate-700 shadow-inner">
-                <i class="fa-regular fa-user text-slate-300"></i>
+            <div class="w-9 h-9 bg-black rounded-full flex items-center justify-center text-sm font-bold border border-dark-border">
+                <i class="fa-regular fa-user text-dark-muted"></i>
             </div>
         </div>
     </nav>
 
     <!-- Main Container -->
-    <main class="max-w-md mx-auto px-4 py-4 pb-24">
+    <main class="max-w-md mx-auto px-4 py-2 pb-24">
         
         <!-- Welcome Banner -->
-        <div class="mb-6 px-2 flex items-end justify-between">
+        <div class="mb-6 px-1 flex items-end justify-between">
             <div>
-                <p class="text-sm font-medium text-slate-500 mb-1" id="currentDate">--</p>
-                <h1 class="text-2xl font-bold text-slate-800 tracking-tight">Siap bertugas? 🚀</h1>
+                <p class="text-xs font-medium text-dark-muted mb-1" id="currentDate">--</p>
+                <h1 class="text-2xl font-bold text-white tracking-tight">Siap bertugas? 🚀</h1>
             </div>
         </div>
-                <!-- Quick Actions Menu -->
-        <div class="mb-6 grid grid-cols-2 gap-4">
-            <a href="speedtest.html" class="bg-slate-900/90 backdrop-blur-md text-white p-4 rounded-2xl flex items-center shadow-lg hover:bg-slate-800 transition border border-slate-700/50 cursor-pointer">
-                <div class="w-10 h-10 bg-whusnet-500/20 rounded-full flex items-center justify-center mr-3 border border-whusnet-500/30">
-                    <i class="fa-solid fa-gauge-high text-whusnet-accent text-lg"></i>
+
+        <!-- Quick Actions Menu -->
+        <div class="mb-8 grid grid-cols-2 gap-4">
+            <a href="speedtest.html" class="bg-dark-panel text-white p-4 rounded-2xl flex items-center border border-dark-border hover:bg-[#111] transition cursor-pointer">
+                <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center mr-3 border border-dark-border">
+                    <i class="fa-solid fa-gauge-high text-white text-lg"></i>
                 </div>
                 <div>
                     <p class="text-sm font-bold">Speed Test</p>
-                    <p class="text-[10px] text-slate-300 font-medium">Uji Kualitas Sinyal</p>
+                    <p class="text-[10px] text-dark-muted font-medium">Uji Kualitas</p>
                 </div>
             </a>
             
-            <!-- Tempat untuk menu lain di masa depan (Opsional) -->
-            <div class="bg-white/60 backdrop-blur-md p-4 rounded-2xl flex items-center shadow-sm border border-slate-200/50 opacity-60">
-                <div class="w-10 h-10 bg-slate-200 rounded-full flex items-center justify-center mr-3">
-                    <i class="fa-solid fa-toolbox text-slate-400"></i>
+            <div class="bg-dark-panel p-4 rounded-2xl flex items-center border border-dark-border opacity-50">
+                <div class="w-10 h-10 bg-black rounded-full flex items-center justify-center mr-3 border border-dark-border">
+                    <i class="fa-solid fa-toolbox text-dark-muted"></i>
                 </div>
                 <div>
-                    <p class="text-sm font-bold text-slate-600">Alat Lain</p>
-                    <p class="text-[10px] text-slate-400 font-medium">Segera Hadir</p>
+                    <p class="text-sm font-bold text-dark-muted">Alat Lain</p>
+                    <p class="text-[10px] text-dark-muted font-medium">Segera Hadir</p>
                 </div>
             </div>
         </div>
 
-
-        <!-- Form Card (Glassmorphism style) -->
-        <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-slate-200/50 border border-white overflow-hidden">
-            <div class="bg-gradient-to-r from-whusnet-600 to-whusnet-500 px-6 py-4 relative overflow-hidden">
-                <div class="absolute -right-4 -top-4 w-24 h-24 bg-white/10 rounded-full blur-xl"></div>
-                <h2 class="font-bold text-white flex items-center text-lg relative z-10">
-                    <i class="fa-solid fa-clipboard-check mr-2.5 opacity-90"></i> Laporan Harian
+        <!-- Form Card Monochrome -->
+        <div class="bg-dark-panel rounded-3xl border border-dark-border overflow-hidden">
+            <div class="border-b border-dark-border px-6 py-4">
+                <h2 class="font-bold text-white flex items-center text-lg">
+                    <i class="fa-solid fa-clipboard-check mr-2.5 text-dark-muted"></i> Laporan Harian
                 </h2>
             </div>
             
@@ -100,101 +105,99 @@
                 <input type="hidden" name="hari" id="hari">
                 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Nama Teknisi</label>
-                    <input type="text" name="teknisi" required placeholder="Cth: Budi Pratama" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Nama Teknisi</label>
+                    <input type="text" name="teknisi" required placeholder="Cth: Budi Pratama" class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white placeholder-[#444] transition-all text-sm">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Paket Mbps</label>
-                    <input type="text" name="tiket" id="tiket" required placeholder="35Mbps" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium uppercase placeholder:normal-case">
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">No. Tiket / Order</label>
+                    <input type="text" name="tiket" id="tiket" required placeholder="TKT-20230912" class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white placeholder-[#444] transition-all text-sm uppercase">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Pelanggan & Lokasi</label>
-                    <input type="text" name="pelanggan" id="pelanggan" required placeholder="Cth: Warnet Jaya - Jl. Sudirman" class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Pelanggan & Lokasi</label>
+                    <input type="text" name="pelanggan" id="pelanggan" required placeholder="Cth: Warnet Jaya - Jl. Sudirman" class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white placeholder-[#444] transition-all text-sm">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Jenis Pekerjaan</label>
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Jenis Pekerjaan</label>
                     <div class="relative">
-                        <select name="deskripsi" id="pekerjaan" required class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium appearance-none">
-                            <option value="" disabled selected>Pilih jenis pekerjaan...</option>
+                        <select name="deskripsi" id="pekerjaan" required class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white transition-all text-sm appearance-none">
+                            <option value="" disabled selected class="text-[#444]">Pilih jenis pekerjaan...</option>
                             <option value="Instalasi Baru (PSB)">Instalasi Baru (PSB)</option>
                             <option value="Maintenance / Gangguan">Maintenance / Gangguan</option>
                             <option value="Splicing / Perbaikan Kabel">Splicing / Perbaikan Kabel</option>
                             <option value="Dismantle / Pencabutan">Dismantle / Pencabutan</option>
                         </select>
-                        <i class="fa-solid fa-chevron-down absolute right-4 top-4 text-slate-400 text-sm pointer-events-none"></i>
+                        <i class="fa-solid fa-chevron-down absolute right-4 top-4 text-dark-muted text-sm pointer-events-none"></i>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Material Digunakan</label>
-                    <textarea name="material" id="material" rows="2" placeholder="Cth: Drop core 50m, 2 Fast Connector, 1 Roset..." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium resize-none"></textarea>
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Material Digunakan</label>
+                    <textarea name="material" id="material" rows="2" placeholder="Cth: Drop core 50m, 2 Fast Connector, 1 Roset..." class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white placeholder-[#444] transition-all text-sm resize-none"></textarea>
                 </div>
 
+                <!-- Status (Segmented Control Dark) -->
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Status Pekerjaan</label>
-                    <div class="flex p-1 bg-slate-100 rounded-xl border border-slate-200/60">
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Status Pekerjaan</label>
+                    <div class="flex p-1 bg-black rounded-xl border border-dark-border">
                         <label class="flex-1 cursor-pointer">
                             <input type="radio" name="status" value="Selesai" class="peer sr-only" checked>
-                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-emerald-600 text-slate-500 text-sm font-bold transition-all">
-                                <i class="fa-solid fa-check-circle mr-1"></i> Selesai
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-[#222] peer-checked:text-white text-dark-muted text-sm font-bold transition-all">
+                                Selesai
                             </div>
                         </label>
                         <label class="flex-1 cursor-pointer">
                             <input type="radio" name="status" value="Pending" class="peer sr-only">
-                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-amber-500 text-slate-500 text-sm font-bold transition-all">
-                                <i class="fa-solid fa-clock mr-1"></i> Pending
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-[#222] peer-checked:text-white text-dark-muted text-sm font-bold transition-all">
+                                Pending
                             </div>
                         </label>
                         <label class="flex-1 cursor-pointer">
                             <input type="radio" name="status" value="Kendala" class="peer sr-only">
-                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-white peer-checked:shadow-sm peer-checked:text-rose-500 text-slate-500 text-sm font-bold transition-all">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> Kendala
+                            <div class="text-center py-2.5 rounded-lg peer-checked:bg-[#222] peer-checked:text-white text-dark-muted text-sm font-bold transition-all">
+                                Kendala
                             </div>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5 ml-1">Hasil Redaman (OTDR/OPM) & Keterangan</label>
-                    <input type="text" name="keterangan" id="keterangan" placeholder="Cth: Rx -19.5 dBm. Splicing aman." class="w-full px-4 py-3 bg-slate-50/50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-whusnet-500 focus:bg-white transition-all text-sm font-medium">
+                    <label class="block text-xs font-bold text-dark-muted uppercase tracking-wider mb-2 ml-1">Hasil Redaman & Keterangan</label>
+                    <input type="text" name="keterangan" id="keterangan" placeholder="Cth: Rx -19.5 dBm. Aman." class="w-full px-4 py-3 bg-black border border-dark-border rounded-xl focus:outline-none focus:border-white text-white placeholder-[#444] transition-all text-sm">
                 </div>
 
-                <button type="submit" class="w-full bg-gradient-to-r from-whusnet-600 to-whusnet-500 hover:from-whusnet-900 hover:to-whusnet-600 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-whusnet-500/30 transition-all active:scale-[0.98] flex items-center justify-center mt-4">
-                    <i class="fa-solid fa-paper-plane mr-2"></i> Submit Laporan
+                <button type="submit" class="w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black font-bold py-3.5 px-4 rounded-xl transition-all active:scale-[0.98] flex items-center justify-center mt-6">
+                    KIRIM LAPORAN
                 </button>
             </form>
         </div>
 
-        <!-- Recent Submissions Preview -->
+        <!-- Recent Submissions -->
         <div class="mt-8">
-            <h3 class="text-sm font-bold text-slate-700 mb-4 px-1 flex items-center justify-between">
+            <h3 class="text-sm font-bold text-dark-muted mb-4 px-1 flex items-center justify-between">
                 <span>Riwayat Hari Ini</span>
-                <span class="text-xs font-semibold text-whusnet-600 bg-whusnet-50 px-2 py-1 rounded-md cursor-pointer hover:bg-whusnet-100 transition">Lihat Sheet</span>
             </h3>
             <div id="recentLogs" class="space-y-3">
-                <div class="text-center py-8 text-sm font-medium text-slate-400 border-2 border-dashed border-slate-200 rounded-2xl bg-white/50" id="emptyState">
-                    <i class="fa-solid fa-inbox text-2xl mb-2 text-slate-300 block"></i>
+                <div class="text-center py-8 text-sm font-medium text-dark-muted border border-dark-border rounded-2xl bg-dark-panel" id="emptyState">
                     Belum ada laporan ditarik.
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-slate-900/95 backdrop-blur-md text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 transition-all duration-300 toast-enter hidden z-50 w-[90%] max-w-sm border border-slate-700">
-        <div class="w-9 h-9 bg-gradient-to-br from-emerald-400 to-emerald-600 rounded-full flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
-            <i class="fa-solid fa-check text-white text-sm"></i>
+    <!-- Toast Notification Dark -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#222] text-white px-4 py-3 rounded-2xl flex items-center space-x-3 transition-all duration-300 toast-enter hidden z-50 w-[90%] max-w-sm border border-[#444]">
+        <div class="w-8 h-8 border border-white rounded-full flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-check text-white text-xs"></i>
         </div>
         <div class="flex-1">
             <p class="text-sm font-bold">Laporan Terkirim!</p>
-            <p class="text-[11px] text-slate-300 font-medium">Data berhasil masuk ke sistem.</p>
         </div>
     </div>
 
-    <!-- Tautan ke JavaScript Terpisah -->
+    <!-- Tautan ke JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
