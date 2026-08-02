@@ -1,118 +1,230 @@
-// --- KONFIGURASI ---
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwElJut3SlBQM78Ej1ZbfLvIXEVbWmaNXl2i5qAb25R0Gvt88wTX9GHjgrK9QlJm3hq/exec';
+const METER_DASHARRAY = 345.5; 
+const meterProgress = document.getElementById('meter-progress');
 
-// Set Current Date
-const now = new Date();
-const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-document.getElementById('currentDate').innerText = now.toLocaleDateString('id-ID', dateOptions);
+meterProgress.style.strokeDasharray = METER_DASHARRAY;
+meterProgress.style.strokeDashoffset = METER_DASHARRAY;
 
-// Format YYYY-MM-DD
-document.getElementById('tanggal').value = now.toISOString().split('T')[0];
-document.getElementById('hari').value = now.toLocaleDateString('id-ID', { weekday: 'long' });
+const TEST_DURATION_MS = 10000; // TES BERJALAN TEPAT 10 DETIK
 
-const form = document.getElementById('reportForm');
-const recentLogs = document.getElementById('recentLogs');
-const emptyState = document.getElementById('emptyState');
-const toast = document.getElementById('toast');
-
-form.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const btnSubmit = form.querySelector('button[type="submit"]');
-    const originalBtnText = btnSubmit.innerHTML;
-    btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> MENGIRIM...';
-    btnSubmit.disabled = true;
-
-    const tiket = document.getElementById('tiket').value;
-    // Gabungkan data pelanggan dengan data GPS (jika ada)
-let pelanggan = document.getElementById('pelanggan').value;
-const koordinatGPS = document.getElementById('koordinat').value;
-if (koordinatGPS) {
-    pelanggan = pelanggan + ' (GPS: ' + koordinatGPS + ')';
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Update nilai di dalam form sebelum dikirim ke Google Sheet
-document.getElementById('pelanggan').value = pelanggan;
-
-    const pekerjaan = document.getElementById('pekerjaan').value;
-    const status = document.querySelector('input[name="status"]:checked').value;
-
-    fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
-        .then(response => {
-            btnSubmit.innerHTML = originalBtnText;
-            btnSubmit.disabled = false;
-            
-            // Logika Warna Status UI untuk Tema Gelap (Dark Mode)
-            let statusColor = 'text-white border-[#444]';
-            if(status === 'Selesai') { statusColor = 'text-green-400 border-green-900 bg-green-950/30'; }
-            if(status === 'Pending') { statusColor = 'text-yellow-400 border-yellow-900 bg-yellow-950/30'; }
-            if(status === 'Kendala') { statusColor = 'text-red-400 border-red-900 bg-red-950/30'; }
-
-            const logCard = document.createElement('div');
-            logCard.className = 'bg-[#0a0a0a] p-4 rounded-2xl border border-[#222222] flex items-start space-x-3 animation-fade-in transition-all';
-            logCard.innerHTML = `
-                <div class="flex-1">
-                    <div class="flex justify-between items-start mb-1">
-                        <h4 class="font-bold text-white text-sm">${tiket}</h4>
-                        <span class="text-[10px] font-bold px-2 py-1 rounded-md uppercase tracking-wider border ${statusColor}">${status}</span>
-                    </div>
-                    <p class="text-xs text-[#888888] mb-1 font-medium">${pelanggan}</p>
-                    <p class="text-[11px] text-[#aaaaaa] font-medium bg-black inline-block px-2 py-0.5 rounded border border-[#222222]">${pekerjaan}</p>
-                </div>
-            `;
-
-            if(emptyState) emptyState.style.display = 'none';
-            recentLogs.prepend(logCard);
-
-            toast.classList.remove('hidden');
-            toast.classList.remove('toast-enter');
-            toast.classList.add('toast-enter-active');
-            
-            setTimeout(() => {
-                toast.classList.remove('toast-enter-active');
-                toast.classList.add('toast-enter');
-                setTimeout(() => toast.classList.add('hidden'), 400);
-            }, 3000);
-
-            form.reset();
-            document.getElementById('tanggal').value = now.toISOString().split('T')[0];
-            document.getElementById('hari').value = now.toLocaleDateString('id-ID', { weekday: 'long' });
-        })
-        .catch(error => {
-            btnSubmit.innerHTML = originalBtnText;
-            btnSubmit.disabled = false;
-            alert('Gagal mengirim laporan. Pastikan koneksi internet stabil.');
-        });
-    
-// --- FITUR MENGAMBIL LOKASI GPS ---
-const btnLokasi = document.getElementById('btn-lokasi');
-const inputKoordinat = document.getElementById('koordinat');
-
-btnLokasi.addEventListener('click', () => {
-    if (navigator.geolocation) {
-        // Ubah ikon jadi loading
-        btnLokasi.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-        
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                // Masukkan hasil ke kolom input
-                inputKoordinat.value = `${lat}, ${lng}`;
-                
-                // Ubah ikon jadi centang hijau sebentar
-                btnLokasi.innerHTML = '<i class="fa-solid fa-check text-green-400"></i>';
-                setTimeout(() => {
-                    btnLokasi.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
-                }, 2000);
-            },
-            (error) => {
-                alert('Gagal mengambil lokasi! Pastikan GPS HP Anda menyala dan izinkan browser mengakses lokasi.');
-                btnLokasi.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
-            },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-        );
-    } else {
-        alert('Browser Anda tidak mendukung fitur lokasi GPS.');
+// FUNGSI PENCARIAN INFO JARINGAN
+async function fetchNetworkInfo() {
+    try {
+        const response = await fetch('https://ipinfo.io/json');
+        const data = await response.json();
+        let providerName = data.org || "Tidak Diketahui";
+        providerName = providerName.replace(/^AS\d+\s/, ''); 
+        document.getElementById('net-isp').innerText = providerName;
+        document.getElementById('net-ip').innerText = data.ip || "-";
+        document.getElementById('net-server').innerText = data.city ? `${data.city}, ${data.country}` : "Server Publik";
+    } catch (error) {
+        try {
+            const cfRes = await fetch('https://1.1.1.1/cdn-cgi/trace');
+            const cfText = await cfRes.text();
+            const ipMatch = cfText.match(/ip=(.*)/);
+            const coloMatch = cfText.match(/colo=(.*)/);
+            document.getElementById('net-ip').innerText = ipMatch ? ipMatch[1] : "-";
+            document.getElementById('net-isp').innerText = "Koneksi Langsung";
+            document.getElementById('net-server').innerText = `Cloudflare Server (${coloMatch ? coloMatch[1] : 'Global'})`;
+        } catch (err2) {
+            document.getElementById('net-isp').innerText = "Diblokir Browser";
+            document.getElementById('net-ip').innerText = "Koneksi Pribadi";
+            document.getElementById('net-server').innerText = "Tidak dapat dijangkau";
+        }
     }
-});
+}
+
+function updateSpeedometer(speedMbps) {
+    const maxSpeed = 200; // Skala maksimal jarum meter
+    let percentage = speedMbps / maxSpeed;
+    if (percentage > 1) percentage = 1; 
+    const offset = METER_DASHARRAY - (percentage * METER_DASHARRAY);
+    meterProgress.style.strokeDashoffset = offset;
+}
+
+function popMetric(id) {
+    const el = document.getElementById(id);
+    el.style.transform = 'scale(1.05)';
+    el.style.backgroundColor = '#1a1a1a';
+    setTimeout(() => {
+        el.style.transform = 'scale(1)';
+        el.style.backgroundColor = '#0a0a0a';
+    }, 300);
+}
+
+// ANIMASI BOOT-UP SPEEDOMETER SEBELUM TEST
+async function bootAnimation() {
+    updateSpeedometer(200); 
+    await sleep(400);
+    updateSpeedometer(0);   
+    await sleep(400);
+}
+
+// 1. PING & JITTER
+async function measureRealPing() {
+    let pings = [];
+    for (let i = 0; i < 5; i++) {
+        const start = performance.now();
+        await fetch(`https://speed.cloudflare.com/__down?bytes=0&r=${Math.random()}`, { cache: 'no-store' });
+        const end = performance.now();
+        pings.push(end - start);
+    }
+    
+    const avgPing = pings.reduce((a, b) => a + b, 0) / pings.length;
+    let jitter = 0;
+    for (let i = 1; i < pings.length; i++) {
+        jitter += Math.abs(pings[i] - pings[i - 1]);
+    }
+    jitter = pings.length > 1 ? jitter / (pings.length - 1) : 0;
+    return { ping: Math.round(avgPing), jitter: Math.round(jitter) };
+}
+
+// 2. DOWNLOAD (BERBASIS WAKTU)
+async function measureRealDownload(mainDisplay, miniDisplayId) {
+    const bytesToDownload = 200 * 1024 * 1024; 
+    const url = `https://speed.cloudflare.com/__down?bytes=${bytesToDownload}&r=${Math.random()}`;
+    
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), TEST_DURATION_MS); 
+
+    try {
+        const response = await fetch(url, { cache: 'no-store', signal: controller.signal });
+        const reader = response.body.getReader();
+        
+        let receivedLength = 0;
+        const startTime = performance.now();
+        let lastReportTime = startTime;
+        let finalSpeed = 0;
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break; 
+            
+            receivedLength += value.length;
+            const now = performance.now();
+            
+            if (now - lastReportTime > 150) { 
+                const durationInSeconds = (now - startTime) / 1000;
+                const bitsLoaded = receivedLength * 8;
+                const speedMbps = (bitsLoaded / durationInSeconds) / (1000 * 1000); 
+                
+                const displayValue = speedMbps.toFixed(2);
+                document.getElementById(miniDisplayId).innerText = displayValue;
+                mainDisplay.innerText = displayValue;
+                updateSpeedometer(speedMbps);
+                
+                finalSpeed = speedMbps;
+                lastReportTime = now;
+            }
+        }
+        clearTimeout(timeoutId);
+        return finalSpeed;
+    } catch (err) {
+        if (err.name === 'AbortError') {
+            return parseFloat(mainDisplay.innerText);
+        }
+        throw err;
+    }
+}
+
+// 3. UPLOAD (BERBASIS WAKTU)
+function measureRealUpload(mainDisplay, miniDisplayId) {
+    return new Promise((resolve) => {
+        const payloadSize = 30 * 1024 * 1024; 
+        const payload = new Uint8Array(payloadSize); 
+        
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://speed.cloudflare.com/__up?r=${Math.random()}`, true);
+        xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+        
+        const startTime = performance.now();
+        let lastReportTime = startTime;
+        let finalSpeed = 0;
+
+        const timeoutId = setTimeout(() => {
+            xhr.abort();
+        }, TEST_DURATION_MS);
+
+        xhr.upload.onprogress = function(e) {
+            const now = performance.now();
+            const durationInSeconds = (now - startTime) / 1000;
+            
+            if (now - lastReportTime > 150) {
+                const bitsLoaded = e.loaded * 8;
+                const speedMbps = (bitsLoaded / durationInSeconds) / (1000 * 1000);
+                
+                const displayValue = speedMbps.toFixed(2);
+                document.getElementById(miniDisplayId).innerText = displayValue;
+                mainDisplay.innerText = displayValue;
+                updateSpeedometer(speedMbps);
+                
+                finalSpeed = speedMbps;
+                lastReportTime = now;
+            }
+        };
+        
+        xhr.onload = function() {
+            clearTimeout(timeoutId);
+            resolve(finalSpeed);
+        };
+        
+        xhr.onabort = function() { resolve(finalSpeed); };
+        xhr.onerror = function() { clearTimeout(timeoutId); resolve(finalSpeed); };
+        
+        xhr.send(payload);
+    });
+}
+
+// LOGIKA UTAMA SAAT TOMBOL DIKLIK
+async function startRealTest() {
+    const btn = document.getElementById('start-btn');
+    const statusText = document.getElementById('status-text');
+    const bigSpeed = document.getElementById('big-speed');
+    
+    btn.disabled = true;
+    btn.classList.add('is-testing'); 
+    btn.innerText = "MENGUJI";
+    
+    ['val-dl', 'val-ul', 'val-ping', 'val-jitter'].forEach(id => document.getElementById(id).innerText = "0");
+    bigSpeed.innerText = "0.00";
+    
+    await bootAnimation();
+
+    try {
+        statusText.innerText = "PING";
+        const pingData = await measureRealPing();
+        document.getElementById('val-ping').innerText = pingData.ping;
+        popMetric('box-ping');
+        document.getElementById('val-jitter').innerText = pingData.jitter;
+        popMetric('box-jitter');
+
+        statusText.innerText = "UNDUH";
+        await measureRealDownload(bigSpeed, 'val-dl');
+        popMetric('box-dl');
+
+        updateSpeedometer(0); 
+        await sleep(500);
+
+        statusText.innerText = "UNGGAH";
+        await measureRealUpload(bigSpeed, 'val-ul');
+        popMetric('box-ul');
+
+        statusText.innerText = "SELESAI";
+    } catch (error) {
+        console.error("Test Error:", error);
+        statusText.innerText = "GAGAL";
+    } finally {
+        updateSpeedometer(0); 
+        bigSpeed.innerText = "- -"; 
+        btn.innerText = "ULANGI";
+        
+        btn.classList.remove('is-testing');
+        btn.disabled = false;
+    }
+}
+
+// Jalankan fetch saat halaman pertama kali dimuat
+window.onload = fetchNetworkInfo;
