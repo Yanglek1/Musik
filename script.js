@@ -260,3 +260,66 @@ function searchCustomer() {
         resultCard.style.display = 'block';
     }, 1200); 
 }
+
+// ====================================================
+// 7. LOGIKA PROFIL TEKNISI (Ganti Foto & Nama)
+// ====================================================
+
+// Fungsi membaca file foto yang diupload
+function previewProfileImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        // 1. Ubah foto besar di halaman profil
+        const imgElement = document.getElementById('profile-img-preview');
+        imgElement.src = reader.result;
+        
+        // 2. Ubah foto kecil (avatar) di Top Bar atas
+        const topAvatar = document.querySelector('.user-info-left .avatar');
+        topAvatar.innerHTML = `<img src="${reader.result}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+        topAvatar.style.background = 'transparent'; // Hilangkan warna biru aslinya
+    }
+    
+    // Jika user memilih file, proses filenya
+    if(event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+
+// Fungsi menyimpan perubahan nama
+function saveProfile() {
+    const newName = document.getElementById('input-profile-name').value;
+    const newPhone = document.getElementById('input-profile-phone').value;
+    
+    if(newName.trim() === '') {
+        alert('Nama tidak boleh kosong!');
+        return;
+    }
+
+    // 1. Update nama besar di halaman Profil
+    document.getElementById('profile-display-name').innerText = newName;
+    
+    // 2. Update nama kecil di Top Bar (Dashboard)
+    const topBarName = document.querySelector('.user-info-left .name');
+    if(topBarName) {
+        topBarName.innerText = newName;
+    }
+
+    alert('Data Profil berhasil diperbarui!');
+}
+
+// Fungsi Logout (Keluar)
+function logoutApp() {
+    const confirmLogout = confirm("Apakah Anda yakin ingin keluar dari aplikasi WhusNet?");
+    
+    if(confirmLogout) {
+        // Hancurkan tampilan aplikasi dan tampilkan layar login (simulasi)
+        document.body.innerHTML = `
+            <div style="display:flex; height:100vh; width:100vw; justify-content:center; align-items:center; flex-direction:column; background:var(--bg-dark); color:var(--text-main); font-family:sans-serif;">
+                <i class="fa-solid fa-right-from-bracket" style="font-size: 4rem; color: var(--danger); margin-bottom: 20px;"></i>
+                <h2 style="margin-bottom: 10px;">Berhasil Logout</h2>
+                <p style="color: var(--text-muted); font-size:0.9rem;">Sesi Anda telah diakhiri dengan aman.</p>
+                <button onclick="location.reload()" style="margin-top: 30px; padding: 12px 30px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Masuk Kembali</button>
+            </div>
+        `;
+    }
+}
