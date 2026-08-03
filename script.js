@@ -18,9 +18,6 @@ function openModule(moduleId, moduleTitle) {
     if (!targetModule) {
         alert(`Modul "${moduleTitle}" masih dalam tahap pengembangan.`);
         return;
-        // (Taruh kode ini di dalam fungsi openModule)
-    if (moduleId === 'modul-lap-instalasi') {
-        setTimeout(resizeCanvas, 50); // Setup ulang ukuran kanvas ttd
     }
 
     document.querySelectorAll('.view-pane').forEach(el => el.classList.remove('active'));
@@ -32,6 +29,12 @@ function openModule(moduleId, moduleTitle) {
     document.getElementById('top-module').style.display = 'flex';
     document.getElementById('module-title').innerText = moduleTitle;
     document.getElementById('btn-back').style.display = 'block';
+    
+        // (Taruh kode ini di dalam fungsi openModule)
+    if (moduleId === 'modul-lap-instalasi') {
+        setTimeout(resizeCanvas, 50); // Setup ulang ukuran kanvas ttd
+    }
+
 }
 
 function goBackToMenu() {
