@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>WhusNet Technician App</title>
-    <!-- Import FontAwesome untuk Ikon -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Hubungkan ke file CSS eksternal -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,10 +17,10 @@
             
             <div class="user-info" id="top-normal">
                 <div class="user-info-left">
-                    <div class="avatar">SY</div>
+                    <div class="avatar" id="top-avatar-container">SY</div>
                     <div>
                         <div class="greeting">Selamat Bekerja,</div>
-                        <div class="name">Sandy Yuga</div>
+                        <div class="name" id="top-bar-name">Sandy Yuga</div>
                     </div>
                 </div>
                 <div style="font-size: 1.3rem; color: var(--text-muted); position: relative;">
@@ -31,7 +29,6 @@
                 </div>
             </div>
 
-            <!-- Mode Saat Masuk Modul -->
             <div id="top-module" style="display: none; align-items: center;">
                 <div class="name" id="module-title" style="color: var(--primary);">Nama Modul</div>
             </div>
@@ -44,26 +41,10 @@
             <div id="tab-home" class="view-pane active">
                 <div class="section-title">Ringkasan Hari Ini</div>
                 <div class="summary-grid">
-                    <div class="summary-card">
-                        <div class="summary-icon ic-blue"><i class="fa-solid fa-house-signal"></i></div>
-                        <div class="summary-value">4</div>
-                        <div class="summary-label">Instalasi Selesai</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon ic-green"><i class="fa-solid fa-check-double"></i></div>
-                        <div class="summary-value">2</div>
-                        <div class="summary-label">Gangguan Selesai</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon ic-yellow"><i class="fa-solid fa-boxes-stacked"></i></div>
-                        <div class="summary-value">12</div>
-                        <div class="summary-label">Sisa Material (ONU)</div>
-                    </div>
-                    <div class="summary-card">
-                        <div class="summary-icon ic-red"><i class="fa-solid fa-globe"></i></div>
-                        <div class="summary-value" style="font-size: 1.1rem; padding-top: 5px;">NORMAL</div>
-                        <div class="summary-label">Status Jaringan Pusat</div>
-                    </div>
+                    <div class="summary-card"><div class="summary-icon ic-blue"><i class="fa-solid fa-house-signal"></i></div><div class="summary-value">4</div><div class="summary-label">Instalasi Selesai</div></div>
+                    <div class="summary-card"><div class="summary-icon ic-green"><i class="fa-solid fa-check-double"></i></div><div class="summary-value">2</div><div class="summary-label">Gangguan Selesai</div></div>
+                    <div class="summary-card"><div class="summary-icon ic-yellow"><i class="fa-solid fa-boxes-stacked"></i></div><div class="summary-value">12</div><div class="summary-label">Sisa Material</div></div>
+                    <div class="summary-card"><div class="summary-icon ic-red"><i class="fa-solid fa-globe"></i></div><div class="summary-value" style="font-size: 1.1rem; padding-top: 5px;">NORMAL</div><div class="summary-label">Status Jaringan</div></div>
                 </div>
 
                 <div class="section-title">Akses Cepat <span style="font-size: 0.75rem; color: var(--primary); font-weight: 500; cursor: pointer;" onclick="document.getElementById('nav-alat').click()">Lihat Semua</span></div>
@@ -72,348 +53,153 @@
                     <div class="tool-item" onclick="openModule('modul-speedtest', 'Speed Test')"><div class="tool-icon"><i class="fa-solid fa-gauge-high"></i></div><div class="tool-label">Speed Test</div></div>
                     <div class="tool-item" onclick="openModule('modul-opm', 'Optical Power Calc')"><div class="tool-icon"><i class="fa-solid fa-calculator"></i></div><div class="tool-label">OPM Calc</div></div>
                     <div class="tool-item" onclick="openModule('modul-odp', 'Perhitungan ODP')"><div class="tool-icon"><i class="fa-solid fa-server"></i></div><div class="tool-label">Hitung ODP</div></div>
-                    <div class="tool-item" onclick="alert('Modul belum tersedia')"><div class="tool-icon"><i class="fa-solid fa-qrcode"></i></div><div class="tool-label">QR Scan</div></div>
-                    <div class="tool-item" onclick="alert('Modul belum tersedia')"><div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div><div class="tool-label">Laporan Inst.</div></div>
-                    <div class="tool-item" onclick="alert('Modul belum tersedia')"><div class="tool-icon"><i class="fa-solid fa-triangle-exclamation"></i></div><div class="tool-label">Laporan Gg.</div></div>
+                    <div class="tool-item" onclick="openModule('modul-lap-instalasi', 'Laporan Instalasi')"><div class="tool-icon"><i class="fa-solid fa-clipboard-check"></i></div><div class="tool-label">Laporan Inst.</div></div>
                     <div class="tool-item" onclick="openModule('modul-checklist', 'Checklist Instalasi')"><div class="tool-icon"><i class="fa-solid fa-list-check"></i></div><div class="tool-label">Checklist</div></div>
                 </div>
             </div>
 
-            <!-- 2. TAB DAFTAR ALAT (LENGKAP 26 MENU) -->
+            <!-- 2. TAB DAFTAR ALAT -->
             <div id="tab-tools" class="view-pane">
                 <div class="list-menu">
-                    <!-- Kategori: Operasional -->
-                    <div class="list-category">Pelanggan & Operasional</div>
+                    <div class="list-category">Operasional & Laporan</div>
                     <div class="list-item" onclick="openModule('modul-pelanggan', 'Data Pelanggan')"><i class="fa-solid fa-users"></i><span>1. Data Pelanggan</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-calendar-day"></i><span>2. Jadwal Teknisi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-map-location-dot"></i><span>3. Navigasi & Rute</span><i class="fa-solid fa-chevron-right"></i></div>
-                    
-                    <!-- Kategori: Pelaporan -->
-                    <div class="list-category">Pelaporan & Checklist</div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-clipboard-check"></i><span>4. Laporan Instalasi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-triangle-exclamation"></i><span>5. Laporan Gangguan</span><i class="fa-solid fa-chevron-right"></i></div>
+                    <div class="list-item" onclick="openModule('modul-lap-instalasi', 'Laporan Instalasi')"><i class="fa-solid fa-clipboard-check"></i><span>4. Laporan Instalasi</span><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="list-item" onclick="openModule('modul-checklist', 'Checklist Instalasi')"><i class="fa-solid fa-list-check"></i><span>11. Checklist Instalasi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-camera"></i><span>12. Foto Dokumentasi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-note-sticky"></i><span>13. Catatan Lapangan</span><i class="fa-solid fa-chevron-right"></i></div>
 
-                    <!-- Kategori: Network Tools -->
                     <div class="list-category">Network Tools</div>
                     <div class="list-item" onclick="openModule('modul-speedtest', 'Speed Test')"><i class="fa-solid fa-gauge-high"></i><span>6. Speed Test</span><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="list-item" onclick="openModule('modul-opm', 'Optical Power Calc')"><i class="fa-solid fa-calculator"></i><span>7. Optical Power Calc</span><i class="fa-solid fa-chevron-right"></i></div>
                     <div class="list-item" onclick="openModule('modul-odp', 'Perhitungan ODP')"><i class="fa-solid fa-server"></i><span>8. Perhitungan ODP</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-square-root-variable"></i><span>18. Kalkulator Teknisi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-draw-polygon"></i><span>19. Peta Jaringan</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-tower-broadcast"></i><span>20. Monitoring ONU</span><i class="fa-solid fa-chevron-right"></i></div>
-
-                    <!-- Kategori: Inventory & HR -->
-                    <div class="list-category">Manajemen & Internal</div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-boxes-stacked"></i><span>9. Inventory</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-qrcode"></i><span>10. QR Scanner</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-user-clock"></i><span>14. Absensi Teknisi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-comments"></i><span>15. Chat Internal</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-screwdriver-wrench"></i><span>16. Pengingat Maintenance</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-book-open"></i><span>17. SOP Teknisi</span><i class="fa-solid fa-chevron-right"></i></div>
-
-                    <!-- Kategori: Personal -->
-                    <div class="list-category">Personal & Lainnya</div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-clock-rotate-left"></i><span>21. Riwayat Pekerjaan</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-wallet"></i><span>22. Penghasilan</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-cart-arrow-down"></i><span>23. Pengajuan Material</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-plane-departure"></i><span>24. Pengajuan Cuti</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-id-badge"></i><span>25. Profil Teknisi</span><i class="fa-solid fa-chevron-right"></i></div>
-                    <div class="list-item" onclick="alert('Segera hadir')"><i class="fa-solid fa-gear"></i><span>26. Pengaturan</span><i class="fa-solid fa-chevron-right"></i></div>
                 </div>
             </div>
 
-            <!-- 3. MODUL: OPM CALCULATOR -->
-            <div id="modul-opm" class="view-pane">
-                <div class="form-group"><label>Power Tx dari OLT / ODP</label><div class="input-row"><input type="number" id="tx-power" placeholder="Contoh: 3.5" step="0.1"><span class="unit">dBm</span></div></div>
-                <div class="form-group"><label>Rasio Splitter (Tambahan)</label>
-                    <select id="splitter">
-                        <option value="0">Tidak Pakai (0 dB)</option>
-                        <option value="3.5">1:2 (~3.5 dB Loss)</option>
-                        <option value="7.2">1:4 (~7.2 dB Loss)</option>
-                        <option value="10.5">1:8 (~10.5 dB Loss)</option>
-                    </select>
-                </div>
-                <div class="form-group"><label>Panjang Kabel Tarikan</label><div class="input-row"><input type="number" id="cable-len" placeholder="Contoh: 200"><span class="unit">Meter</span></div></div>
-                <div class="grid-2-col">
-                    <div class="form-group"><label>Titik Splicing</label><input type="number" id="splice-count" value="1" min="0"></div>
-                    <div class="form-group"><label>Fast Connector</label><input type="number" id="connector-count" value="2" min="0"></div>
-                </div>
-                <button class="btn-action" onclick="calculateOPM()">Hitung Estimasi Rx</button>
-                <div id="result-box" class="result-box">
-                    <div id="res-title" style="font-weight: bold; margin-bottom: 5px;">STATUS</div>
-                    <div class="result-power"><span id="res-rx">0.00</span> <span style="font-size: 1.2rem;">dBm</span></div>
-                    <div id="res-desc" style="font-size: 0.85rem;"></div>
-                    <div class="loss-details">
-                        <div class="loss-item"><span>Redaman Kabel:</span> <span id="loss-cable">0 dB</span></div>
-                        <div class="loss-item"><span>Mekanik (Konektor+Splice):</span> <span id="loss-mechanic">0 dB</span></div>
-                        <div class="loss-item" style="color: var(--text-main); font-weight: bold; margin-top: 8px;"><span>Total Loss:</span> <span id="loss-total">0 dB</span></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. MODUL: SPEED TEST -->
-            <div id="modul-speedtest" class="view-pane">
-                <div class="speedometer-container">
-                    <svg class="speedometer" viewBox="0 0 260 140">
-                        <path class="meter-bg" d="M 20 130 A 110 110 0 0 1 240 130" />
-                        <path class="meter-progress" id="meter-progress" d="M 20 130 A 110 110 0 0 1 240 130" />
-                    </svg>
-                    <div class="speed-text">
-                        <div class="main-speed" id="big-speed">0.00</div>
-                        <div style="font-size: 0.9rem; color: var(--text-muted); font-weight: bold;" id="status-text">SIAP</div>
-                    </div>
-                </div>
-                <button class="btn-speed" id="start-btn" onclick="startRealTest()">Mulai</button>
-                <div class="metrics-grid">
-                    <div class="metric-box"><div class="metric-label">Download</div><div class="metric-value"><span id="val-dl">0.00</span> <span style="font-size: 0.8rem; color:#888;">Mbps</span></div></div>
-                    <div class="metric-box"><div class="metric-label">Upload</div><div class="metric-value"><span id="val-ul">0.00</span> <span style="font-size: 0.8rem; color:#888;">Mbps</span></div></div>
-                    <div class="metric-box"><div class="metric-label">Ping</div><div class="metric-value"><span id="val-ping">0</span> <span style="font-size: 0.8rem; color:#888;">ms</span></div></div>
-                    <div class="metric-box"><div class="metric-label">Jitter</div><div class="metric-value"><span id="val-jitter">0</span> <span style="font-size: 0.8rem; color:#888;">ms</span></div></div>
-                </div>
-            </div>
-
-            <!-- 5. MODUL: PERHITUNGAN ODP -->
-            <div id="modul-odp" class="view-pane">
-                <div class="form-group">
-                    <label>Kapasitas Total Port ODP</label>
-                    <select id="odp-total">
-                        <option value="8">8 Port (Standard)</option>
-                        <option value="16">16 Port</option>
-                        <option value="24">24 Port</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Jumlah Port Terpakai saat ini</label>
-                    <input type="number" id="odp-used" placeholder="Contoh: 5" min="0">
-                </div>
-                
-                <button class="btn-action" onclick="calculateODP()">Hitung Kapasitas ODP</button>
-                
-                <div id="odp-result-box" class="result-box">
-                    <div id="odp-res-title" style="font-weight: bold; margin-bottom: 5px;">STATUS ODP</div>
-                    <div class="result-power"><span id="odp-percent">0</span><span style="font-size: 1.2rem;">%</span></div>
-                    <div id="odp-res-desc" style="font-size: 0.85rem;"></div>
-                    <div class="loss-details">
-                        <div class="loss-item"><span>Total Port:</span> <span id="odp-val-total">0</span></div>
-                        <div class="loss-item"><span>Port Terpakai:</span> <span id="odp-val-used">0</span></div>
-                        <div class="loss-item" style="color: var(--text-main); font-weight: bold; margin-top: 8px;">
-                            <span>Port Kosong (Idle):</span> <span id="odp-val-idle">0</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 6. MODUL: CHECKLIST INSTALASI -->
-            <div id="modul-checklist" class="view-pane">
-                <div class="form-group" style="padding: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600;">
-                        <span>Progress Pekerjaan</span>
-                        <span id="checklist-text" style="color: var(--primary);">0/8 Selesai</span>
-                    </div>
-                    <div class="progress-bg">
-                        <div id="checklist-bar" class="progress-bar"></div>
-                    </div>
-                    <div class="checklist-items">
-                        <label class="check-container"> ONT Aktif & Menyala <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Indikator LOS Mati (Padam) <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Indikator PON Hijau Stabil <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Sinyal WiFi Terdeteksi <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Speedtest Sesuai Paket <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Layanan TV / IPTV (Jika Ada) <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Layanan VoIP (Jika Ada) <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                        <label class="check-container"> Edukasi Pelanggan Selesai <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
-                    </div>
-                </div>
-                <button class="btn-action" onclick="saveChecklist()">Simpan Laporan & Selesai</button>
-            </div>
-
-            <!-- 7. MODUL: DATA PELANGGAN -->
-            <div id="modul-pelanggan" class="view-pane">
-                <div class="search-box">
-                    <input type="text" id="search-cust-id" placeholder="Cari ID / Nama Pelanggan...">
-                    <button onclick="searchCustomer()"><i class="fa-solid fa-magnifying-glass"></i></button>
-                </div>
-
-                <div id="loading-cust" style="display: none; text-align: center; padding: 30px; color: var(--primary);">
-                    <i class="fa-solid fa-circle-notch fa-spin fa-2x"></i>
-                    <div style="margin-top: 10px; font-size: 0.9rem; color: var(--text-muted);">Mencari di database...</div>
-                </div>
-
-                <div id="customer-result" class="customer-card">
-                    <div class="customer-header">
-                        <div class="customer-avatar"><i class="fa-solid fa-user"></i></div>
-                        <div>
-                            <div class="customer-name" id="cust-name">Nama Pelanggan</div>
-                            <div class="customer-id" id="cust-id">ID</div>
-                        </div>
-                    </div>
-                    
-                    <div class="customer-details">
-                        <div class="detail-row"><span class="detail-label">Paket:</span><span class="detail-value" id="cust-pkg">Fiber 50 Mbps</span></div>
-                        <div class="detail-row"><span class="detail-label">Status:</span><span class="detail-value" style="color: var(--success);">Aktif / Normal</span></div>
-                        <div class="detail-row"><span class="detail-label">Alamat:</span><span class="detail-value" id="cust-addr">Jl. Contoh Alamat No. 123</span></div>
-                        <div class="detail-row"><span class="detail-label">Riwayat:</span><span class="detail-value">Belum ada gangguan</span></div>
-                    </div>
-
-                    <div class="map-placeholder" onclick="alert('Membuka aplikasi Google Maps...')">
-                        <div style="background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 20px; font-size: 0.75rem;">Ketuk untuk buka GPS</div>
-                    </div>
-
-                    <div class="action-buttons">
-                        <div class="action-btn" onclick="alert('Mengalihkan ke chat WhatsApp...')"><i class="fa-brands fa-whatsapp btn-wa"></i>WhatsApp</div>
-                        <div class="action-btn" onclick="alert('Melakukan panggilan telepon...')"><i class="fa-solid fa-phone btn-call"></i>Telepon</div>
-                        <div class="action-btn" onclick="alert('Membuka rute di Google Maps...')"><i class="fa-solid fa-location-dot btn-map"></i>Arahkan</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ============================================== -->
-            <!-- TAB: PROFIL TEKNISI                            -->
-            <!-- ============================================== -->
+            <!-- 3. TAB PROFIL -->
             <div id="tab-profil" class="view-pane">
                 <div class="profile-header">
-                    <!-- Area Foto Profil -->
                     <div class="profile-avatar-container" onclick="document.getElementById('profile-upload').click()">
                         <img id="profile-img-preview" src="https://ui-avatars.com/api/?name=Sandy+Yuga&background=3b82f6&color=fff&size=150" alt="Profile">
                         <div class="profile-camera-badge"><i class="fa-solid fa-camera"></i></div>
                     </div>
-                    <!-- Input File Tersembunyi -->
                     <input type="file" id="profile-upload" accept="image/*" style="display: none;" onchange="previewProfileImage(event)">
-                    
                     <div style="margin-top: 15px; font-weight: 600; font-size: 1.2rem;" id="profile-display-name">Sandy Yuga</div>
                     <div style="color: var(--text-muted); font-size: 0.85rem; margin-top: 5px;">ID: WHUS-2026-001</div>
                 </div>
 
                 <div class="section-title" style="margin-top: 20px;">Data Pribadi</div>
-                <div class="form-group">
-                    <label>Nama Lengkap</label>
-                    <input type="text" id="input-profile-name" value="Sandy Yuga">
-                </div>
-                <div class="form-group">
-                    <label>Nomor HP (WhatsApp)</label>
-                    <input type="tel" id="input-profile-phone" value="081234567890">
-                </div>
-                <div class="form-group">
-                    <label>Area / Divisi</label>
-                    <input type="text" id="input-profile-area" value="Madiun & Sekitarnya" readonly style="opacity: 0.5; cursor: not-allowed;">
-                </div>
-
+                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="input-profile-name" value="Sandy Yuga"></div>
+                <div class="form-group"><label>Nomor HP (WhatsApp)</label><input type="tel" id="input-profile-phone" value="081234567890"></div>
                 <button class="btn-action" onclick="saveProfile()">Simpan Perubahan</button>
 
                 <div class="section-title" style="margin-top: 30px;">Pengaturan & Akun</div>
                 <div class="list-menu">
-                    <div class="list-item">
-                        <i class="fa-solid fa-moon"></i><span>Dark Mode (Tema Gelap)</span>
-                        <i class="fa-solid fa-toggle-on" style="color: var(--primary); font-size: 1.5rem;"></i>
-                    </div>
-                    <div class="list-item" onclick="alert('Mengalihkan ke halaman ganti password...')">
-                        <i class="fa-solid fa-lock"></i><span>Ganti Password</span><i class="fa-solid fa-chevron-right"></i>
-                    </div>
-                    <!-- Tombol Logout -->
-                    <div class="list-item" style="border-color: var(--danger); margin-top: 10px;" onclick="logoutApp()">
+                    <div class="list-item" onclick="logoutApp()" style="border-color: var(--danger); margin-top: 10px;">
                         <i class="fa-solid fa-right-from-bracket" style="color: var(--danger);"></i>
                         <span style="color: var(--danger); font-weight: bold;">Keluar (Logout)</span>
                     </div>
                 </div>
             </div>
 
-            <!-- ============================================== -->
-            <!-- MODUL 9: LAPORAN INSTALASI                     -->
-            <!-- ============================================== -->
+            <!-- ================= MODUL-MODUL ALAT ================= -->
+            
+            <!-- MODUL: OPM -->
+            <div id="modul-opm" class="view-pane">
+                <div class="form-group"><label>Power Tx dari OLT / ODP</label><div class="input-row"><input type="number" id="tx-power" placeholder="Contoh: 3.5" step="0.1"><span class="unit">dBm</span></div></div>
+                <div class="form-group"><label>Rasio Splitter (Tambahan)</label>
+                    <select id="splitter"><option value="0">Tidak Pakai (0 dB)</option><option value="3.5">1:2 (~3.5 dB Loss)</option><option value="7.2">1:4 (~7.2 dB Loss)</option><option value="10.5">1:8 (~10.5 dB Loss)</option></select>
+                </div>
+                <div class="form-group"><label>Panjang Kabel</label><div class="input-row"><input type="number" id="cable-len" placeholder="Contoh: 200"><span class="unit">Meter</span></div></div>
+                <div class="grid-2-col">
+                    <div class="form-group"><label>Splicing</label><input type="number" id="splice-count" value="1" min="0"></div>
+                    <div class="form-group"><label>Fast Conn</label><input type="number" id="connector-count" value="2" min="0"></div>
+                </div>
+                <button class="btn-action" onclick="calculateOPM()">Hitung Estimasi Rx</button>
+                <div id="result-box" class="result-box">
+                    <div id="res-title" style="font-weight: bold; margin-bottom: 5px;">STATUS</div>
+                    <div class="result-power"><span id="res-rx">0.00</span> <span style="font-size: 1.2rem;">dBm</span></div>
+                    <div id="res-desc" style="font-size: 0.85rem;"></div>
+                </div>
+            </div>
+
+            <!-- MODUL: SPEED TEST -->
+            <div id="modul-speedtest" class="view-pane">
+                <div class="speedometer-container">
+                    <svg class="speedometer" viewBox="0 0 260 140"><path class="meter-bg" d="M 20 130 A 110 110 0 0 1 240 130" /><path class="meter-progress" id="meter-progress" d="M 20 130 A 110 110 0 0 1 240 130" /></svg>
+                    <div class="speed-text"><div class="main-speed" id="big-speed">0.00</div><div style="font-size: 0.9rem; color: var(--text-muted); font-weight: bold;" id="status-text">SIAP</div></div>
+                </div>
+                <button class="btn-speed" id="start-btn" onclick="startRealTest()">Mulai</button>
+                <div class="metrics-grid">
+                    <div class="metric-box"><div class="metric-label">Download</div><div class="metric-value"><span id="val-dl">0.00</span></div></div>
+                    <div class="metric-box"><div class="metric-label">Upload</div><div class="metric-value"><span id="val-ul">0.00</span></div></div>
+                </div>
+            </div>
+
+            <!-- MODUL: ODP -->
+            <div id="modul-odp" class="view-pane">
+                <div class="form-group"><label>Kapasitas Total Port</label><select id="odp-total"><option value="8">8 Port</option><option value="16">16 Port</option></select></div>
+                <div class="form-group"><label>Port Terpakai</label><input type="number" id="odp-used" placeholder="Contoh: 5" min="0"></div>
+                <button class="btn-action" onclick="calculateODP()">Hitung Kapasitas ODP</button>
+                <div id="odp-result-box" class="result-box"><div id="odp-res-title">STATUS ODP</div><div class="result-power"><span id="odp-percent">0</span>%</div></div>
+            </div>
+
+            <!-- MODUL: CHECKLIST -->
+            <div id="modul-checklist" class="view-pane">
+                <div class="form-group" style="padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600;"><span>Progress</span><span id="checklist-text" style="color: var(--primary);">0/4 Selesai</span></div>
+                    <div class="progress-bg"><div id="checklist-bar" class="progress-bar"></div></div>
+                    <div class="checklist-items">
+                        <label class="check-container"> ONT Aktif & Menyala <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
+                        <label class="check-container"> Indikator PON Hijau Stabil <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
+                        <label class="check-container"> Speedtest Sesuai Paket <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
+                        <label class="check-container"> Edukasi Pelanggan Selesai <input type="checkbox" class="chk-item" onchange="updateChecklist()"><span class="checkmark"></span></label>
+                    </div>
+                </div>
+                <button class="btn-action" onclick="saveChecklist()">Simpan Checklist</button>
+            </div>
+
+            <!-- MODUL: PELANGGAN -->
+            <div id="modul-pelanggan" class="view-pane">
+                <div class="search-box"><input type="text" id="search-cust-id" placeholder="Cari Pelanggan..."><button onclick="searchCustomer()"><i class="fa-solid fa-magnifying-glass"></i></button></div>
+                <div id="loading-cust" style="display: none; text-align: center; padding: 30px;"><i class="fa-solid fa-circle-notch fa-spin fa-2x"></i></div>
+                <div id="customer-result" class="customer-card">
+                    <div class="customer-header"><div class="customer-avatar"><i class="fa-solid fa-user"></i></div><div><div class="customer-name" id="cust-name">Budi</div><div class="customer-id" id="cust-id">ID</div></div></div>
+                    <div class="customer-details">
+                        <div class="detail-row"><span class="detail-label">Paket:</span><span class="detail-value" id="cust-pkg">Fiber 50 Mbps</span></div>
+                        <div class="detail-row"><span class="detail-label">Alamat:</span><span class="detail-value" id="cust-addr">Jl. Merdeka</span></div>
+                    </div>
+                    <div class="action-buttons">
+                        <div class="action-btn"><i class="fa-brands fa-whatsapp btn-wa"></i>WhatsApp</div>
+                        <div class="action-btn"><i class="fa-solid fa-location-dot btn-map"></i>Arahkan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MODUL: LAPORAN INSTALASI (Foto & TTD) -->
             <div id="modul-lap-instalasi" class="view-pane">
-                
-                <!-- Data Perangkat -->
-                <div class="section-title" style="margin-top: 0;">Data Perangkat</div>
-                <div class="form-group">
-                    <label>SN ONU / Modem</label>
-                    <div class="input-row">
-                        <input type="text" id="inst-sn" placeholder="Contoh: ZTEG12345678">
-                        <button class="btn-scan" onclick="alert('Membuka kamera untuk scan barcode...')"><i class="fa-solid fa-barcode"></i></button>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>MAC Address</label>
-                    <input type="text" id="inst-mac" placeholder="Contoh: 00:1A:2B:3C:4D:5E">
-                </div>
-                
+                <div class="form-group"><label>SN ONU / Modem</label><div class="input-row"><input type="text" id="inst-sn"><button class="btn-scan"><i class="fa-solid fa-barcode"></i></button></div></div>
                 <div class="grid-2-col">
-                    <div class="form-group">
-                        <label>Redaman (Rx)</label>
-                        <div class="input-row"><input type="number" id="inst-rx" placeholder="-18.5" step="0.1"><span class="unit">dBm</span></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Speed (DL)</label>
-                        <div class="input-row"><input type="number" id="inst-speed" placeholder="50"><span class="unit">Mbps</span></div>
-                    </div>
+                    <div class="photo-upload-box" onclick="document.getElementById('upload-sebelum').click()"><img id="preview-sebelum" src="" style="display:none;"><div class="photo-placeholder" id="placeholder-sebelum"><i class="fa-solid fa-camera"></i><span>Sebelum</span></div><input type="file" id="upload-sebelum" accept="image/*" style="display: none;" onchange="previewInstPhoto(event, 'preview-sebelum', 'placeholder-sebelum')"></div>
+                    <div class="photo-upload-box" onclick="document.getElementById('upload-sesudah').click()"><img id="preview-sesudah" src="" style="display:none;"><div class="photo-placeholder" id="placeholder-sesudah"><i class="fa-solid fa-camera"></i><span>Sesudah</span></div><input type="file" id="upload-sesudah" accept="image/*" style="display: none;" onchange="previewInstPhoto(event, 'preview-sesudah', 'placeholder-sesudah')"></div>
                 </div>
-                
-                <!-- Foto Dokumentasi -->
-                <div class="section-title" style="margin-top: 25px;">Foto Dokumentasi</div>
-                <div class="grid-2-col">
-                    <!-- Foto Sebelum -->
-                    <div class="photo-upload-box" onclick="document.getElementById('upload-sebelum').click()">
-                        <img id="preview-sebelum" src="" style="display:none;">
-                        <div class="photo-placeholder" id="placeholder-sebelum">
-                            <i class="fa-solid fa-camera"></i>
-                            <span>Foto Sebelum</span>
-                        </div>
-                        <input type="file" id="upload-sebelum" accept="image/*" style="display: none;" onchange="previewInstPhoto(event, 'preview-sebelum', 'placeholder-sebelum')">
-                    </div>
-                    <!-- Foto Sesudah -->
-                    <div class="photo-upload-box" onclick="document.getElementById('upload-sesudah').click()">
-                        <img id="preview-sesudah" src="" style="display:none;">
-                        <div class="photo-placeholder" id="placeholder-sesudah">
-                            <i class="fa-solid fa-camera"></i>
-                            <span>Foto Sesudah</span>
-                        </div>
-                        <input type="file" id="upload-sesudah" accept="image/*" style="display: none;" onchange="previewInstPhoto(event, 'preview-sesudah', 'placeholder-sesudah')">
-                    </div>
-                </div>
-
-                <!-- Catatan Tambahan -->
-                <div class="form-group" style="margin-top: 15px;">
-                    <label>Catatan Teknisi (Opsional)</label>
-                    <textarea id="inst-notes" rows="3" placeholder="Tambahkan catatan instalasi di sini..." style="width: 100%; background: var(--bg-dark); border: 1px solid var(--border); color: var(--text-main); padding: 12px; border-radius: 8px; font-size: 1rem; outline: none; resize: vertical;"></textarea>
-                </div>
-
-                <!-- Canvas Tanda Tangan -->
-                <div class="section-title" style="margin-top: 25px;">Tanda Tangan Pelanggan</div>
+                <div class="section-title" style="margin-top: 15px;">Tanda Tangan Pelanggan</div>
                 <div class="signature-container">
                     <canvas id="signature-pad"></canvas>
                     <div class="btn-clear-sig" onclick="clearSignature()"><i class="fa-solid fa-eraser"></i> Hapus</div>
                 </div>
-
-                <button class="btn-action" onclick="submitInstalasi(this)">Upload Laporan Otomatis</button>
+                <button class="btn-action" onclick="submitInstalasi(this)">Upload Laporan</button>
             </div>
 
         </main>
 
         <!-- ================= BOTTOM NAVIGATION ================= -->
         <nav class="bottom-nav" id="bottom-nav">
-            <div class="nav-item active" onclick="switchMainTab('tab-home', this, 'Dashboard Utama')">
-                <i class="fa-solid fa-house"></i>
-                <span>Beranda</span>
-            </div>
-            <div class="nav-item" onclick="alert('Modul Jadwal belum tersedia')">
-                <i class="fa-regular fa-calendar-check"></i>
-                <span>Jadwal</span>
-            </div>
-            <div class="nav-item" id="nav-alat" onclick="switchMainTab('tab-tools', this, 'Daftar Alat')">
-                <i class="fa-solid fa-toolbox"></i>
-                <span>Alat</span>
-            </div>
-            <div class="nav-item" onclick="switchMainTab('tab-profil', this, 'Profil Teknisi')">
-                <i class="fa-regular fa-user"></i>
-                <span>Profil</span>
-            </div>
+            <div class="nav-item active" onclick="switchMainTab('tab-home', this, 'Dashboard Utama')"><i class="fa-solid fa-house"></i><span>Beranda</span></div>
+            <div class="nav-item" onclick="alert('Modul Jadwal belum aktif')"><i class="fa-regular fa-calendar-check"></i><span>Jadwal</span></div>
+            <div class="nav-item" id="nav-alat" onclick="switchMainTab('tab-tools', this, 'Daftar Alat')"><i class="fa-solid fa-toolbox"></i><span>Alat</span></div>
+            <div class="nav-item" onclick="switchMainTab('tab-profil', this, 'Profil Teknisi')"><i class="fa-regular fa-user"></i><span>Profil</span></div>
         </nav>
 
     </div>
 
-    <!-- Hubungkan ke file JavaScript eksternal -->
     <script src="script.js"></script>
 </body>
 </html>
