@@ -326,3 +326,117 @@ function logoutApp() {
         `;
     }
 }
+
+// ====================================================
+// 8. LOGIKA LAPORAN INSTALASI (Foto & Ttd)
+// ====================================================
+
+// A. Preview Foto Sebelum/Sesudah
+function previewInstPhoto(event, imgId, placeholderId) {
+    const reader = new FileReader();
+    reader.onload = function() {
+        const imgElement = document.getElementById(imgId);
+        const placeholder = document.getElementById(placeholderId);
+        imgElement.src = reader.result;
+        imgElement.style.display = 'block';
+        placeholder.style.display = 'none';
+    }
+    if(event.target.files[0]) {
+        reader.readAsDataURL(event.target.files[0]);
+    }
+}
+
+// B. Logika Canvas Tanda Tangan (Bisa Corat-coret Pakai Jari/Mouse)
+const canvas = document.getElementById('signature-pad');
+const ctx = canvas ? canvas.getContext('2d') : null;
+let isDrawing = false;
+
+// Setup ukuran canvas agar gambarnya tidak buram
+function resizeCanvas() {
+    if(!canvas) return;
+    const ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    ctx.scale(ratio, ratio);
+    ctx.strokeStyle = '#000000'; // Tinta hitam
+    ctx.lineWidth = 2.5; // Ketebalan tinta
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+}
+
+function startPosition(e) {
+    isDrawing = true;
+    draw(e);
+}
+
+function endPosition() {
+    isDrawing = false;
+    ctx.beginPath(); // Putus garis agar tulisan tidak nyambung terus
+}
+
+function draw(e) {
+    if (!isDrawing) return;
+    e.preventDefault(); // Cegah layar scroll saat nulis
+    
+    const rect = canvas.getBoundingClientRect();
+    let clientX, clientY;
+    
+    // Deteksi apakah digambar pakai Sentuhan HP (Touch) atau Mouse PC
+    if(e.type.includes('touch')){
+        clientX = e.touches[0].clientX;
+        clientY = e.touches[0].clientY;
+    } else {
+        clientX = e.clientX;
+        clientY = e.clientY;
+    }
+    
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+
+    ctx.lineTo(x, y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+}
+
+// Pasang Sensor Sentuhan (Event Listener) jika Canvasnya ada
+if(canvas) {
+    canvas.addEventListener('mousedown', startPosition);
+    canvas.addEventListener('mouseup', endPosition);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseout', endPosition);
+    
+    canvas.addEventListener('touchstart', startPosition, {passive: false});
+    canvas.addEventListener('touchend', endPosition);
+    canvas.addEventListener('touchmove', draw, {passive: false});
+}
+
+// Tombol Hapus TTD
+function clearSignature() {
+    if(ctx && canvas) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+}
+
+// C. Simulasi Upload Laporan
+function submitInstalasi(btnElement) {
+    const sn = document.getElementById('inst-sn').value;
+    
+    // Validasi sederhana
+    if(sn.trim() === '') {
+        alert('SN ONU (Modem) wajib diisi!');
+        return;
+    }
+    
+    const originalText = btnElement.innerText;
+    btnElement.innerText = "Mengunggah Data...";
+    btnElement.disabled = true;
+
+    // Simulasi loading 1.5 detik seolah upload ke server
+    setTimeout(() => {
+        alert('Laporan Instalasi beserta Foto dan Tanda Tangan berhasil diunggah ke sistem pusat!');
+        btnElement.innerText = originalText;
+        btnElement.disabled = false;
+        goBackToMenu(); // Kembali ke daftar menu
+    }, 1500);
+}
