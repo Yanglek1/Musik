@@ -145,3 +145,12 @@ svg.speedometer { width: 100%; height: 100%; overflow: visible; }
 .action-btn:active { background: var(--bg-hover); transform: scale(0.95); }
 .action-btn i { font-size: 1.2rem; }
 .btn-wa { color: #25D366; } .btn-call { color: var(--primary); } .btn-map { color: var(--danger); }
+
+/* =========================================
+   8. CSS KHUSUS PROFIL TEKNISI
+   ========================================= */
+.profile-header { display: flex; flex-direction: column; align-items: center; padding: 10px 0 20px 0; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+.profile-avatar-container { position: relative; width: 110px; height: 110px; border-radius: 50%; padding: 4px; border: 2px dashed var(--primary); cursor: pointer; transition: transform 0.2s; }
+.profile-avatar-container:active { transform: scale(0.95); }
+.profile-avatar-container img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; background: var(--bg-dark); }
+.profile-camera-badge { position: absolute; bottom: 0; right: 0; width: 34px; height: 34px; background: var(--primary); border-radius: 50%; display: flex; justify-content: center; align-items: center; border: 4px solid var(--bg-dark); color: #fff; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
